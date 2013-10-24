@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="jacket_style.css"></link>
+		<script type="text/javascript">
+			var coat_threshold = 55;
+			window.onload = function() {
+				var ajax_url = "http://from.so/web_lab/pgh_weather.php";
+				
+				var xmlhttp = new XMLHttpRequest();	
+				
+				xmlhttp.onreadystatechange=function() {
+					if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+						console.log(xmlhttp);
+						
+						var response_xml = xmlhttp.responseXML;
+
+						var condition = response_xml.getElementsByTagName("condition")[0];
+						var temp = parseInt(condition.getAttribute("temp"));
+
+						var response_text;
+						if(temp < coat_threshold) {
+							response_text = "Yes, it's " + temp + " outside";
+						} else {
+							response_text = "No, it's " + temp + " outside";
+						}
+						var result = document.getElementById("result");
+						result.textContent = response_text;
+						
+					}
+				};
+				xmlhttp.open("GET", ajax_url);
+				xmlhttp.send();
+			}
+		</script>
+	</head>
+	<body>
+		<h1 class="fadeInDown">Should I wear a jacket?</h1>
+		<h2 class="fadeInDown animated" id="result">Let me find out...</h2>
+	</body>
+</html>
